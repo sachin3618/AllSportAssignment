@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SportRepository {
     fun getSports(): Flow<List<Data>>
-    suspend fun refreshSports()
-    suspend fun deleteSport(id: Int)
+    suspend fun refreshSports() : Boolean
+    suspend fun deleteSport(id: Int): Boolean
 }

@@ -38,9 +38,10 @@ class SportViewModel(
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             try {
-                refreshSportsUseCase()
+                val success = refreshSportsUseCase()
+                if (!success) _uiState.value = UiState.Error("Failed to refresh")
             } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.localizedMessage ?: "Unknown error")
+                //  _uiState.value = UiState.Error(e.localizedMessage ?: "Unknown error")
             }
         }
     }
@@ -60,9 +61,20 @@ class SportViewModel(
         }
     }
 
-    fun refresh(){
+    fun refresh() {
+        _uiState.value = UiState.Loading
         viewModelScope.launch {
-            refreshSportsUseCase()
+            try {
+                val result = refreshSportsUseCase()
+                if (!result) {
+                    _uiState.value = UiState.Error("Error refreshing sports data")
+                } else {
+                    //  _uiState.value = UiState.Success(emptyList())  // Or populate with success data
+                }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.localizedMessage ?: "Unknown error")
+            }
         }
     }
+
 }
